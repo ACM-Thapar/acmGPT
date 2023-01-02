@@ -1,9 +1,12 @@
-import express from 'express';
+// add "type": "module" to package.json to use import syntax
+import express from 'express'; 
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
+
+console.log(process.env.OPENAI_API_KEY)
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,

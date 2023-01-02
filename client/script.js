@@ -25,7 +25,7 @@ function typeText(element, text) {
 
   let interval = setInterval(() => {
     if (index < text.length) {
-      element.innerHTML += text.chartAt(index) // will get character at specific index
+      element.innerHTML += text.charAt(index) // will get character at specific index
       index++
     }
     else {
@@ -42,3 +42,81 @@ function generateUniqueId() {
 
   return `id-${timestamp}-${hexadecimalString}`
 }
+
+// Function for displayig stripes
+function chatStripe(isAi, value, uniqueId) {
+  return (
+    `
+      <div class="wrapper ${isAi && 'ai'}">
+        <div class="chat">
+          <div class="profile">
+            <img
+              src=${isAi ? bot : user}
+            />
+          </div>
+          <div class="message" id=${uniqueId}>${value}</div>
+        </div>
+      </div>
+    `
+  )
+}
+
+
+// Function to handle submit action
+
+const handleSubmit = async (e) => {
+  try {
+    e.preventDefault() //to prevent reloading 
+    const uniqueId = generateUniqueId()
+    const data = new FormData(form)
+  
+    // user input
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
+    form.reset()
+  
+    // bot response
+    
+    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
+  
+    chatContainer.scrollTop = chatContainer.scrollHeight
+  
+    const messageDiv = document.getElementById(uniqueId)
+  
+    loader(messageDiv)
+
+    const response = await fetch('http://localhost:5000', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: data.get('prompt')
+      })
+    })
+
+    clearInterval(loadInterval)
+    messageDiv.innerHTML = " "
+
+    if(response.ok){
+      const data = await response.json()
+      const parseData = data.bot.trim()
+
+      typeText(messageDiv, parseData)
+    }
+    else {
+      const err = await response.text()
+      messageDiv.innerHTML = "Something went wrong"
+      alert(err)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+}
+
+form.addEventListener('submit', handleSubmit)
+form.addEventListener('keyup', (e) => {
+  if (e.keyCode === 13) {
+    handleSubmit(e)
+  }
+})
