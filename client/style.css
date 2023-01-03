@@ -8,14 +8,13 @@
 }
 
 body {
-  background: #343541;
+  background: #ffffff;
 }
 
 #app {
   width: 100vw;
   height: 100vh;
-  background: #343541;
-
+  background: #9574e3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +49,7 @@ body {
 }
 
 .ai {
-  background: #40414F;
+  background: #7FA8E5;
 }
 
 .chat {
@@ -89,7 +88,7 @@ body {
 .message {
   flex: 1;
 
-  color: #dcdcdc;
+  color: #ffffff;
   font-size: 20px;
 
   max-width: 100%;
@@ -117,7 +116,7 @@ form {
   max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
-  background: #40414F;
+  background: #ffffff;
 
   display: flex;
   flex-direction: row;
